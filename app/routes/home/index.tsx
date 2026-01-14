@@ -8,6 +8,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  console.log("Hello Form Home");
+  const now = new Date().toISOString();
+
+  if (typeof window === "undefined") {
+    console.log("Server Renders At:", now);
+  } else {
+    console.log("Client Hydration At:", now);
+  }
   return <>My App</>;
 }
