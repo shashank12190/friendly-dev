@@ -1,11 +1,10 @@
-import React from "react";
 import { Link } from "react-router";
 import type { Project } from "~/types";
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <Link
-      to={`${project.id}`}
+      to={`/projects/${project.id}`}
       className="block transform transition duration-300 hover:scale-[1.02]"
     >
       <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-sm transition hover:shadow-md cursor-pointer">
