@@ -50,6 +50,12 @@ const Navbar = () => {
             >
               Contact
             </NavLink>
+            <NavLink
+              className={({ isActive }) => (isActive ? active : base)}
+              to="/api-2"
+            >
+              2 API EX
+            </NavLink>
           </div>
         </div>
 
