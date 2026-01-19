@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { FaLaptopCode, FaTimes, FaBars } from "react-icons/fa";
 import { NavLink } from "react-router";
+import { FaSignInAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const base = "transition hover:text-blue-400";
   const active = "text-blue-400 font-semibold";
+  const isLoggedIn = false;
   return (
     <nav className="bg-gray-800 border-b border-gray-700 shadow-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -50,11 +52,20 @@ const Navbar = () => {
             >
               Contact
             </NavLink>
-            <NavLink
+            {/* <NavLink
               className={({ isActive }) => (isActive ? active : base)}
               to="/api-2"
             >
               2 API EX
+            </NavLink> */}
+          </div>
+          <div>
+            <NavLink
+              className={`bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2`}
+              to="/login"
+            >
+              <FaSignInAlt className="text-lg" />
+              <span>Login</span>
             </NavLink>
           </div>
         </div>

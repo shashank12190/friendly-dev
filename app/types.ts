@@ -43,3 +43,11 @@ export interface PageMeta {
 
   field_breadcrum_banner_image: string;
 }
+
+export type PostMetaData = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+};

@@ -1,7 +1,9 @@
-import { Outlet } from "react-router";
+import React from "react";
+import { FaLaptopCode } from "react-icons/fa";
+import { NavLink, Outlet } from "react-router";
 import Navbar from "~/components/Navbar";
 
-const MainLayout = () => {
+const AuthLayout = () => {
   return (
     <>
       <Navbar />
@@ -12,4 +14,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default AuthLayout;
