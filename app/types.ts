@@ -7,6 +7,7 @@ export type Project = {
   category: string;
   featured: boolean;
   date: string;
+  documentId: string;
 };
 
 export interface EnergyAsset {
@@ -43,3 +44,34 @@ export interface PageMeta {
 
   field_breadcrum_banner_image: string;
 }
+
+export type PostMetaData = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+};
+
+export type StrapiResponse<T> = {
+  data: T[];
+};
+export type StrapiProject = {
+  id: string;
+  documentId: string;
+  title: string;
+  description: string;
+  image?: {
+    url: string;
+    formats?: {
+      thumbnail: string;
+      small: string;
+      medium: string;
+      large: string;
+    };
+  };
+  url: string;
+  date: string;
+  category: string;
+  featured: boolean;
+};

@@ -4,7 +4,7 @@ import type { Project } from "~/types";
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <Link
-      to={`/projects/${project.id}`}
+      to={`/projects/${project.documentId}`}
       className="block transform transition duration-300 hover:scale-[1.02]"
     >
       <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-sm transition hover:shadow-md cursor-pointer">
@@ -20,7 +20,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
           <p className="text-sm text-gray-300 mb-2">{project.description}</p>
           <div className="flex justify-between items-center text-sm text-gray-400">
             <span>{project.category}</span>
-            <span>{new Date(project.date).toLocaleDateString()}</span>
+            <span>
+              {new Date(project.date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </span>
           </div>
         </div>
       </div>

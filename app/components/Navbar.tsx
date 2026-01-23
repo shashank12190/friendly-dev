@@ -1,11 +1,23 @@
-import React, { useState } from "react";
-import { FaLaptopCode, FaTimes, FaBars } from "react-icons/fa";
-import { NavLink } from "react-router";
+import React, { useEffect, useState } from "react";
+import { FaLaptopCode, FaTimes, FaBars, FaSignOutAlt } from "react-icons/fa";
+import { NavLink, useNavigate } from "react-router";
+import { FaSignInAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "~/store/store";
+import { loadFromStorage, logout } from "~/store/authSlice";
+// import type { RootState } from "@reduxjs/toolkit/query";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
   const base = "transition hover:text-blue-400";
   const active = "text-blue-400 font-semibold";
+
+  useEffect(() => {
+    dispatch(loadFromStorage());
+  }, [dispatch]);
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.user);
+  const navigate = useNavigate();
   return (
     <nav className="bg-gray-800 border-b border-gray-700 shadow-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -28,6 +40,7 @@ const Navbar = () => {
             </NavLink>
             <NavLink
               className={({ isActive }) => (isActive ? active : base)}
+              prefetch="intent"
               to="/projects"
             >
               Projects
@@ -50,13 +63,43 @@ const Navbar = () => {
             >
               Contact
             </NavLink>
-            <NavLink
+            {/* <NavLink
               className={({ isActive }) => (isActive ? active : base)}
               to="/api-2"
             >
               2 API EX
-            </NavLink>
+            </NavLink> */}
           </div>
+
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                dispatch(logout());
+                navigate("/login");
+              }}
+              className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 flex items-center justify-center gap-2"
+            >
+              <FaSignOutAlt />
+              Logout
+            </button>
+          ) : (
+            <NavLink
+              className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+              to="/login"
+            >
+              <FaSignInAlt className="text-lg" />
+              <span>Login</span>
+            </NavLink>
+          )}
+          {/* <div>
+            <NavLink
+              className={`bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2`}
+              to="/login"
+            >
+              <FaSignInAlt className="text-lg" />
+              <span>Login</span>
+            </NavLink>
+          </div> */}
         </div>
 
         {/* hamburger menu */}
