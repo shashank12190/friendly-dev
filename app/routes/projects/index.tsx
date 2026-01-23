@@ -17,6 +17,10 @@ export async function loader({
   }
 
   const json: StrapiResponse<StrapiProject> = await res.json();
+<<<<<<< HEAD
+=======
+  // const projects = json.data;
+>>>>>>> 93e45bed92baa6386f0d34cd110937c66f69a744
   const projects = json.data.map((item) => {
     let imageUrl = "/images/no-image.png";
     if (Array.isArray(item.image) && item.image[0]?.url) {
