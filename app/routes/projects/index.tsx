@@ -1,4 +1,4 @@
-import type { Project } from "~/types";
+import type { Project, StrapiProject, StrapiResponse } from "~/types";
 import type { Route } from "./+types/index";
 import ProjectCard from "~/components/ProjectCard";
 import { useState } from "react";
@@ -8,9 +8,49 @@ import { AnimatePresence, motion } from "framer-motion";
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`);
-  const data = await res.json();
-  return { projects: data };
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/projects?populate=*`,
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch projects");
+  }
+
+  const json: StrapiResponse<StrapiProject> = await res.json();
+  // const projects = json.data;
+  const projects = json.data.map((item) => {
+    let imageUrl = "/images/no-image.png";
+    if (Array.isArray(item.image) && item.image[0]?.url) {
+      imageUrl = `${import.meta.env.VITE_STRAPI_URL}${item.image[0].url}`;
+    } else if (typeof item.image === "string") {
+      imageUrl = item.image;
+    }
+    return {
+      id: item.id,
+      documentId: item.documentId,
+      title: item.title,
+      description: item.description,
+      image: imageUrl,
+      url: item.url,
+      date: item.date,
+      category: item.category,
+      featured: item.featured,
+    };
+  });
+  //   ({
+  //   id: item.id,
+  //   documentId: item.documentId,
+  //   title: item.title,
+  //   description: item.description,
+  //   image: item.image?.[0].url
+  //     ? `${import.meta.env.VITE_STRAPI_URL}${item.image[0].url}`
+  //     : "/images/no-image.png",
+  //   url: item.url,
+  //   date: item.date,
+  //   category: item.category,
+  //   featured: item.featured,
+  // }));
+  return { projects };
 }
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {

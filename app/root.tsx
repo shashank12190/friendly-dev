@@ -10,6 +10,8 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import Navbar from "./components/Navbar";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,8 +43,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {/* <Navbar /> */}
-        <main className="">{children}</main>
+        <Provider store={store}>
+          <Navbar />
+          <main className="">{children}</main>
+        </Provider>
         <ScrollRestoration />
         <Scripts />
       </body>

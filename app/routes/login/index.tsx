@@ -1,7 +1,71 @@
 import { FaLaptopCode } from "react-icons/fa";
-import { Link } from "react-router";
+import { Form, Link, redirect, useActionData, useNavigate } from "react-router";
+import type { Route } from "./+types";
+import { store } from "~/store/store";
+import { loginSuccess } from "~/store/authSlice";
+import { useEffect } from "react";
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const errors: Record<string, string> = {};
+
+  if (!email) errors.email = "Email is required";
+  if (!password) errors.password = "Password is required";
+
+  if (Object.keys(errors).length > 0) {
+    return { errors };
+  }
+
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/local`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      identifier: email,
+      password,
+    }),
+  });
+
+  const data = await res.json();
+
+  console.log(data);
+
+  if (!res.ok) {
+    return {
+      errors: {
+        form: data?.error?.message || "Invalid credentials",
+      },
+    };
+  }
+
+  return { user: data.user, jwt: data.jwt };
+}
 
 const LoginPage = () => {
+  const actionData = useActionData<{
+    user: any;
+    jwt: string;
+    errors?: Record<string, string>;
+  }>();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (actionData?.user && actionData?.jwt) {
+      // Update Redux
+      store.dispatch(
+        loginSuccess({
+          user: actionData.user,
+          jwt: actionData.jwt,
+        }),
+      );
+
+      // Navigate to dashboard
+      navigate("/dashboard");
+    }
+  }, [actionData, navigate]);
   return (
     <>
       <div className="w-full max-w-4xl bg-gray-900 mx-auto rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
@@ -22,7 +86,7 @@ const LoginPage = () => {
         {/* right section */}
         <div className="p-8">
           <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
-          <form action="" className="space-y-6">
+          <Form method="post" className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -63,7 +127,7 @@ const LoginPage = () => {
             >
               Login
             </button>
-          </form>
+          </Form>
           <p className="mt-4 text-center text-sm text-gray-400">
             Don’t have an account?{" "}
             <Link to="/register" className="text-blue-400 hover:underline">

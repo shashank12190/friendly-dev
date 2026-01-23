@@ -34,9 +34,11 @@ export async function loader({
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { projects, posts } = loaderData;
 
+  console.log({ projects });
+
   return (
     <>
-      <FeaturedProjects projects={projects} count={2} />
+      {/* <FeaturedProjects projects={projects} count={2} /> */}
       <AboutPreview />
       <LatestPosts posts={posts} />
     </>
